@@ -1,8 +1,8 @@
-const { getUsers } = require('./controllers');
-const express = require('express');
-var cors = require('cors')
+const { getUsers } = require("./controllers");
+const express = require("express");
+var cors = require("cors");
 
-const { PORT } = require('./config/config');
+const { PORT } = require("./config/config");
 const router = express.Router();
 
 // const corsOptions = {
@@ -11,14 +11,18 @@ const router = express.Router();
 //   }
 
 const app = express();
-//console.log('get users', getUsers().then(res => console.log(res)))
 app.use(express.json());
-app.use(cors())
+app.use(cors());
 
-router.get('/',  (req,res)=>   getUsers().then(x=>res.status(200).send(x))
-	 
-);
+app.get("/", async (req, res) => {
+	try {
+		let users = await getUsers(); 
+		res.status(200).send(users)
+	} catch (error) {
+		res.status(500).send(error)
+	}
+});
 
 app.listen(PORT, () => {
-	console.log(`Server started on port ${PORT}`)
-})
+	console.log(`Server started on port ${PORT}`);
+});
